@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function App() {
   return (
     <div style={{padding:20,fontFamily:'-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial'}}>
