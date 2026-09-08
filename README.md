@@ -71,3 +71,13 @@ npm test
 - 결과 JSON에는 원문, 정규화 텍스트, confidence, matched, status, reason, 원본 targetRegion이 포함됩니다. 설정·실행 오류는 ERROR이며 UI 문구 불일치와 reason으로 구분합니다. ERROR가 있으면 CLI 종료 코드는 1입니다.
 
 Figma 연동은 미구현입니다. 향후 입력 단계에서 Figma 좌표를 스크린샷 픽셀 좌표의 targetRegion으로 변환하여 동일한 검사 흐름에 전달할 수 있습니다.
+
+## 자동 Fixed Copy 탐색
+
+```sh
+node src/cli/autoFixedCopyTest.js /Users/mac/qa_img/main_re.png
+```
+
+전체 화면을 3배 확대해 OCR하고, NFKC와 공백 제거 후 연속 단어가 expected와 정확히 일치하면 후보로 삼습니다. 후보 단어 bbox 합집합을 원본 픽셀 좌표로 환산한 뒤 상하좌우 2px를 추가하고 이미지 경계로 clamp합니다. Crop을 3배 확대해 재-OCR하고 exact match를 반환합니다. 같은 문구의 여러 위치는 candidates에 각각 보존합니다.
+
+이 경로는 Fixed Copy 전용이며 수동 targetRegion 및 Dynamic Format 검사와 분리되어 있습니다. CLI의 15개 샘플 문구로 탐색 성공률과 최종 exact match 성공률을 출력합니다. PaddleOCR 및 포함 매칭은 임시 실험으로만 진행했으며 저장소 구현에는 포함하지 않습니다.
