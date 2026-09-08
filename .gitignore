@@ -2,3 +2,7 @@ node_modules/
 dist/
 .env
 .DS_Store
+
+# Local OCR models and generated output
+*.traineddata
+ocr-result.txt

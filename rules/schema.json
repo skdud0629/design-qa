@@ -1,0 +1,224 @@
+{
+  "type": "object",
+  "properties": {
+    "version": {
+      "const": 1
+    },
+    "imageSize": {
+      "type": "object",
+      "properties": {
+        "width": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "width",
+        "height"
+      ]
+    },
+    "ocr": {
+      "type": "object",
+      "properties": {
+        "upscale": {
+          "const": 3
+        },
+        "lang": {
+          "const": "kor+eng"
+        },
+        "psm": {
+          "const": 11
+        }
+      },
+      "required": [
+        "upscale",
+        "lang",
+        "psm"
+      ]
+    },
+    "confidenceThreshold": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "rules": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "selector": {
+            "type": "string",
+            "minLength": 1
+          },
+          "type": {
+            "enum": [
+              "fixed_copy",
+              "dynamic"
+            ]
+          },
+          "targetRegion": {
+            "type": "object",
+            "properties": {
+              "x": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "y": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "width": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "height": {
+                "type": "integer",
+                "minimum": 1
+              }
+            },
+            "required": [
+              "x",
+              "y",
+              "width",
+              "height"
+            ]
+          },
+          "severity": {
+            "enum": [
+              "error",
+              "warning"
+            ],
+            "default": "error"
+          },
+          "expected": {
+            "oneOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            ]
+          },
+          "format": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "const": "time_range"
+                  },
+                  "pattern": {
+                    "const": "HH:mm-HH:mm"
+                  },
+                  "hourCycle": {
+                    "const": 24
+                  },
+                  "ignoreWhitespace": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "kind",
+                  "pattern",
+                  "hourCycle",
+                  "ignoreWhitespace"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "const": "currency"
+                  },
+                  "currency": {
+                    "const": "KRW"
+                  },
+                  "thousandSeparator": {
+                    "const": ","
+                  },
+                  "suffix": {
+                    "const": "원"
+                  },
+                  "decimalPlaces": {
+                    "const": 0
+                  },
+                  "ignoreWhitespace": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "kind",
+                  "currency",
+                  "thousandSeparator",
+                  "suffix",
+                  "decimalPlaces",
+                  "ignoreWhitespace"
+                ]
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "selector",
+          "type",
+          "targetRegion"
+        ],
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "type": {
+                  "const": "fixed_copy"
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "expected"
+              ]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "type": {
+                  "const": "dynamic"
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "format"
+              ]
+            }
+          }
+        ]
+      }
+    }
+  },
+  "required": [
+    "version",
+    "imageSize",
+    "ocr",
+    "confidenceThreshold",
+    "rules"
+  ],
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

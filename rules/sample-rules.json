@@ -1,0 +1,79 @@
+{
+  "version": 1,
+  "imageSize": {
+    "width": 390,
+    "height": 958
+  },
+  "ocr": {
+    "upscale": 3,
+    "lang": "kor+eng",
+    "psm": 11
+  },
+  "confidenceThreshold": 85,
+  "rules": [
+    {
+      "id": "meal_title",
+      "selector": "home.meal.title",
+      "type": "fixed_copy",
+      "targetRegion": {
+        "x": 20,
+        "y": 129,
+        "width": 90,
+        "height": 26
+      },
+      "severity": "error",
+      "expected": "오늘의 식단"
+    },
+    {
+      "id": "meal_time",
+      "selector": "home.meal.time",
+      "type": "dynamic",
+      "targetRegion": {
+        "x": 34,
+        "y": 175,
+        "width": 92,
+        "height": 23
+      },
+      "severity": "error",
+      "format": {
+        "kind": "time_range",
+        "pattern": "HH:mm-HH:mm",
+        "hourCycle": 24,
+        "ignoreWhitespace": true
+      }
+    },
+    {
+      "id": "meal_price",
+      "selector": "home.meal.price",
+      "type": "dynamic",
+      "targetRegion": {
+        "x": 304,
+        "y": 174,
+        "width": 53,
+        "height": 24
+      },
+      "severity": "error",
+      "format": {
+        "kind": "currency",
+        "currency": "KRW",
+        "thousandSeparator": ",",
+        "suffix": "원",
+        "decimalPlaces": 0,
+        "ignoreWhitespace": true
+      }
+    },
+    {
+      "id": "event_copy",
+      "selector": "home.event.title",
+      "type": "fixed_copy",
+      "targetRegion": {
+        "x": 96,
+        "y": 785,
+        "width": 181,
+        "height": 28
+      },
+      "severity": "error",
+      "expected": "KOIN 전용 이벤트 혜택받기"
+    }
+  ]
+}
